@@ -70,6 +70,13 @@ namespace MHR___Prefab_Fixer
                     var newPrefab = ReplaceBytes(prefabBytes, oldPrefabBytes, newPrefabBytes);
 
                     File.WriteAllBytes(prefab, newPrefab);
+
+                    //Add check to make sure that the bytes got written properly and are the correct length
+                    var tmpNewFileBytes = File.ReadAllBytes(prefab);
+
+                    if (newPrefab.Length != tmpNewFileBytes.Length || !BytesSimilar(newPrefab, tmpNewFileBytes)) {
+                        throw new Exception($"{prefab} has encountered an issue where the written bytes do not match the actual bytes, this may be caused due to the folder being on a different drive or folder permissions. Please try moving the prefab fixer to the same drive as the folder, or run this program as administrator.");
+                    }
                 }
                 else if (ContainsBytes(prefabBytes, newPrefabBytes))
                 {
@@ -85,6 +92,24 @@ namespace MHR___Prefab_Fixer
 
             //Open Folder Location with file explorer
             OpenExplorerLocation(conversionFolder.FullName);
+        }
+
+        private static bool BytesSimilar(byte[] bytes1, byte[] bytes2)
+        {
+            if (bytes1.Length != bytes2.Length)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < bytes1.Length; i++)
+            {
+                if (bytes1[i] != bytes2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static void CloneDirectory(DirectoryInfo root, DirectoryInfo dest, string searchPattern = "*")
