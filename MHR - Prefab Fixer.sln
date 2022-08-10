@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MHR - Prefab Fixer", "MHR - Prefab Fixer\MHR - Prefab Fixer.csproj", "{AE5850C6-71F4-4FAF-A986-032F5D0D1282}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE5850C6-71F4-4FAF-A986-032F5D0D1282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE5850C6-71F4-4FAF-A986-032F5D0D1282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE5850C6-71F4-4FAF-A986-032F5D0D1282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE5850C6-71F4-4FAF-A986-032F5D0D1282}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0CC14319-56B4-4272-B295-03AC9502B07E}
+	EndGlobalSection
+EndGlobal
