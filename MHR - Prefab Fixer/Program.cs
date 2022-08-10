@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MHR___Prefab_Fixer
 {
@@ -37,18 +37,15 @@ namespace MHR___Prefab_Fixer
         {
             Console.WriteLine("Please select the folder");
 
-            var dialog = new FolderBrowserDialog();
-            dialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var result = dialog.ShowDialog();
+            var baseFolder = PickStaticFolder(Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 
-            if (result != DialogResult.OK)
+            if (!baseFolder.Exists)
             {
                 Environment.Exit(0);
             }
 
             //Create conversion folder
             //Copy over all files in same format to folder, and attempt conversion on the folder
-            var baseFolder = new DirectoryInfo(dialog.SelectedPath);
             var conversionBaseFolder = CreateFolder(Environment.CurrentDirectory, "Conversions");
             var conversionFolder = conversionBaseFolder.CreateSubdirectory($"{DateTime.Now:yyyyMMdd_HHmmss}_{Path.GetFileName(baseFolder.FullName)}");
             CloneDirectory(baseFolder, conversionFolder, "*.pfb.17");
@@ -121,6 +118,24 @@ namespace MHR___Prefab_Fixer
             {
                 File.Copy(file.FullName, Path.Combine(dest.FullName, Path.GetFileName(file.FullName)), true);
             }
+        }
+
+        public static DirectoryInfo PickStaticFolder(params string[] path)
+        {
+            var folderPath = string.Empty;
+
+            var folderDialog = new CommonOpenFileDialog();
+            folderDialog.IsFolderPicker = true;
+            folderDialog.InitialDirectory = path.Length != 0 ? Path.Combine(path) : Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            var dialogResult = folderDialog.ShowDialog();
+
+            if (dialogResult == CommonFileDialogResult.Ok)
+            {
+                folderPath = folderDialog.FileName;
+            }
+
+            return new DirectoryInfo(folderPath);
         }
 
         private static byte[] ReplaceBytes(byte[] bytes, byte[] search, byte[] replace)
