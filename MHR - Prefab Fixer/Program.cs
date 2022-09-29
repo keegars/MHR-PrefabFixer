@@ -48,16 +48,38 @@ namespace MHR___Prefab_Fixer
             //Copy over all files in same format to folder, and attempt conversion on the folder
             var conversionBaseFolder = CreateFolder(Environment.CurrentDirectory, "Conversions");
             var conversionFolder = conversionBaseFolder.CreateSubdirectory($"{DateTime.Now:yyyyMMdd_HHmmss}_{Path.GetFileName(baseFolder.FullName)}");
-            CloneDirectory(baseFolder, conversionFolder, "*.pfb.17");
+            CloneDirectory(baseFolder, conversionFolder
+                ,
+                "*.pfb.17"
+                );
 
             var prefabs = Directory.GetFiles(conversionFolder.FullName, "*.pfb.17", SearchOption.AllDirectories);
 
+            //TU1 Conversion
             var oldPrefabHex = "66 e1 a6 8f 06 6d d5 ed d1 07 28 e8 bb dd 1d 11";
             var oldPrefabBytes = HexStringToByte(oldPrefabHex);
 
             var newPrefabHex = "66 e1 a6 8f 46 5f 73 52 d1 07 28 e8 bb dd 1d 11";
             var newPrefabBytes = HexStringToByte(newPrefabHex);
+            
+            ConvertPrefabs(prefabs, oldPrefabBytes, newPrefabBytes);
 
+            //TU2 Conversion
+            oldPrefabHex = "46 5F 73 52 D1 07 28 E8 BB DD 1D 11";
+            oldPrefabBytes = HexStringToByte(oldPrefabHex);
+
+            newPrefabHex = "7F D7 47 7F D1 07 28 E8 68 20 A6 CB";
+            newPrefabBytes = HexStringToByte(newPrefabHex);
+            
+            ConvertPrefabs(prefabs, oldPrefabBytes, newPrefabBytes);
+
+            
+            //Open Folder Location with file explorer
+            OpenExplorerLocation(conversionFolder.FullName);
+        }
+
+        private static void ConvertPrefabs(string[] prefabs, byte[] oldPrefabBytes, byte[] newPrefabBytes)
+        {
             foreach (var prefab in prefabs)
             {
                 var prefabBytes = File.ReadAllBytes(prefab);
@@ -74,7 +96,8 @@ namespace MHR___Prefab_Fixer
                     //Add check to make sure that the bytes got written properly and are the correct length
                     var tmpNewFileBytes = File.ReadAllBytes(prefab);
 
-                    if (newPrefab.Length != tmpNewFileBytes.Length || !BytesSimilar(newPrefab, tmpNewFileBytes)) {
+                    if (newPrefab.Length != tmpNewFileBytes.Length || !BytesSimilar(newPrefab, tmpNewFileBytes))
+                    {
                         throw new Exception($"{prefab} has encountered an issue where the written bytes do not match the actual bytes, this may be caused due to the folder being on a different drive or folder permissions. Please try moving the prefab fixer to the same drive as the folder, or run this program as administrator.");
                     }
                 }
@@ -86,12 +109,10 @@ namespace MHR___Prefab_Fixer
                 else
                 {
                     //Throw exception and warn of issue
-                    throw new Exception($"{prefab} does not contain any sequence for new and old prefab bytes, this has been thrown to avoid converting it.");
+                    //throw new Exception($"{prefab} does not contain any sequence for new and old prefab bytes, this has been thrown to avoid converting it.");
                 }
             }
 
-            //Open Folder Location with file explorer
-            OpenExplorerLocation(conversionFolder.FullName);
         }
 
         private static bool BytesSimilar(byte[] bytes1, byte[] bytes2)
