@@ -56,26 +56,24 @@ namespace MHR___Prefab_Fixer
             var prefabs = Directory.GetFiles(conversionFolder.FullName, "*.pfb.17", SearchOption.AllDirectories);
 
             //TU1 Conversion
-            var oldPrefabHex = "66 e1 a6 8f 06 6d d5 ed d1 07 28 e8 bb dd 1d 11";
-            var oldPrefabBytes = HexStringToByte(oldPrefabHex);
-
-            var newPrefabHex = "66 e1 a6 8f 46 5f 73 52 d1 07 28 e8 bb dd 1d 11";
-            var newPrefabBytes = HexStringToByte(newPrefabHex);
-            
-            ConvertPrefabs(prefabs, oldPrefabBytes, newPrefabBytes);
+            TUConversion(prefabs, "66 e1 a6 8f 06 6d d5 ed d1 07 28 e8 bb dd 1d 11", "66 e1 a6 8f 46 5f 73 52 d1 07 28 e8 bb dd 1d 11");
 
             //TU2 Conversion
-            oldPrefabHex = "46 5F 73 52 D1 07 28 E8 BB DD 1D 11";
-            oldPrefabBytes = HexStringToByte(oldPrefabHex);
+            TUConversion(prefabs, "46 5F 73 52 D1 07 28 E8 BB DD 1D 11", "7F D7 47 7F D1 07 28 E8 68 20 A6 CB");
 
-            newPrefabHex = "7F D7 47 7F D1 07 28 E8 68 20 A6 CB";
-            newPrefabBytes = HexStringToByte(newPrefabHex);
-            
-            ConvertPrefabs(prefabs, oldPrefabBytes, newPrefabBytes);
+            //TU3 Conversion
+            TUConversion(prefabs, "7F D7 47 7F D1 07", "71 7F C2 1A D1 07");
 
-            
             //Open Folder Location with file explorer
             OpenExplorerLocation(conversionFolder.FullName);
+        }
+
+        public static void TUConversion(string[] prefabs, string oldPrefabHex, string newPrefabHex)
+        {
+            var oldPrefabBytes = HexStringToByte(oldPrefabHex);
+            var newPrefabBytes = HexStringToByte(newPrefabHex);
+
+            ConvertPrefabs(prefabs, oldPrefabBytes, newPrefabBytes);
         }
 
         private static void ConvertPrefabs(string[] prefabs, byte[] oldPrefabBytes, byte[] newPrefabBytes)
