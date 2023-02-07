@@ -64,6 +64,9 @@ namespace MHR___Prefab_Fixer
             //TU3 Conversion
             TUConversion(prefabs, "7F D7 47 7F D1 07", "71 7F C2 1A D1 07");
 
+            //TU4 Conversion
+            TUConversion(prefabs, "71 7F C2 1A D1 07", "94 A3 7D 6A D1 07");
+
             //Open Folder Location with file explorer
             OpenExplorerLocation(conversionFolder.FullName);
         }
