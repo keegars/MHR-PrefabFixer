@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
@@ -69,6 +70,11 @@ namespace MHR___Prefab_Fixer
 
             //TU5 Conversion
             TUConversion(prefabs, "94 A3 7D 6A D1 07", "F2 4D 31 39 D1 07");
+            //TU5 - Skin color fix
+            TUConversion(prefabs, "01 00 00 00 01 00 00 00 03 00 00 00 00 00 00 00 23", "00 01 00 00 01 00 00 00 03 00 00 00 00 00 00 00 23");
+            TUConversion(prefabs, "01 00 00 00 01 00 00 00 3c 00 00 00 53 00 6f", "00 01 00 00 01 00 00 00 3c 00 00 00 53 00 6f");
+            TUConversion(prefabs, "01 00 00 00 01 00 00 00 40 00 00 00 53 00 6f", "00 01 00 00 01 00 00 00 40 00 00 00 53 00 6f");
+            TUConversion(prefabs, "01 00 00 00 01 00 00 00 3e 00 00 00 53 00 6f", "00 01 00 00 01 00 00 00 3e 00 00 00 53 00 6f");
 
             //Open Folder Location with file explorer
             OpenExplorerLocation(conversionFolder.FullName);
@@ -87,6 +93,8 @@ namespace MHR___Prefab_Fixer
             foreach (var prefab in prefabs)
             {
                 var prefabBytes = File.ReadAllBytes(prefab);
+
+                var last200 = prefabBytes.Skip(1280).ToArray();
 
                 if (ContainsBytes(prefabBytes, oldPrefabBytes))
                 {
